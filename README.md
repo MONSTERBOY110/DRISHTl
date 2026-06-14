@@ -22,10 +22,6 @@ Find a lost person in CCTV footage from a single photo. Drishti scans every vide
 - 🧹 **Quality gating** - blurry / tiny / badly-lit face crops are rejected before matching (with per-camera debug counts)
 - 🎬 **Snapshots** - best frame + face crop saved for every confirmed match
 
-## System Architecture
-
-![Architecture Diagram](docs/arch.png)
-
 **Pipeline:** `CCTV frames → SCRFD face detection → quality gate → ArcFace embedding → cosine similarity vs target → IoU track aggregation → open-set decision (per camera)`
 
 ## Project Structure
