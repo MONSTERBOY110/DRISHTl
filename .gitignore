@@ -200,3 +200,4 @@ CCTVS/
 .env
 node_modules/
 /uploads
+.codex
