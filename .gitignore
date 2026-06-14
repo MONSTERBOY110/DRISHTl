@@ -1,0 +1,202 @@
+# ============================================================================
+# PYTHON
+# ============================================================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.python-version
+
+# Virtual environment
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# ============================================================================
+# IDEs
+# ============================================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+.playwright-mcp
+
+# ============================================================================
+# PROJECT SPECIFIC
+# ============================================================================
+# Data directories (runtime generated)
+data/uploads/*
+data/results/*
+data/cctvs/*.mp4
+!data/uploads/.gitkeep
+!data/results/.gitkeep
+
+# Logs
+logs/*.log
+*.log
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+.DS_Store
+Thumbs.db
+
+# OS specific
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ============================================================================
+# CREDENTIALS & SENSITIVE
+# ============================================================================
+.env
+.env.local
+*.pem
+*.key
+cctv_config.json
+
+# IDE specific
+.vscode/settings.json
+
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# OS specific files
+Thumbs.db
+.DS_Store
+*.bak
+*.tmp
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Local development
+.env.local
+.env.*.local
+
+# Project specific
+data/uploads/*
+!data/uploads/.gitkeep
+data/results/*
+!data/results/.gitkeep
+data/cctvs/*
+!data/cctvs/.gitkeep
+logs/*
+!logs/.gitkeep
+models/*
+!models/.gitkeep
+
+# Video and large media files (optional - uncomment if needed)
+# *.mp4
+# *.avi
+# *.mkv
+# *.mov
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+data/
+CCTVS/
+*.log
+.env
+node_modules/
+/uploads
