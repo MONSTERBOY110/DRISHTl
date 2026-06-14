@@ -15,6 +15,7 @@ produces the embedding, so we never feed raw bbox crops to the recognizer.
 """
 
 import logging
+import os
 from typing import Any, Dict, List, Optional
 
 import numpy as np
@@ -22,6 +23,72 @@ import numpy as np
 from . import config
 
 logger = logging.getLogger(__name__)
+
+
+def _register_cuda_dll_dirs() -> None:
+    """Put the pip-installed CUDA/cuDNN ``nvidia/*/bin`` dirs on the Windows DLL
+    search path.
+
+    ``preload_dlls()`` loads the top-level DLLs (``cudnn64_9.dll`` etc.), but
+    cuDNN then loads its OWN sublibraries (``cudnn_graph64_9.dll``, the engine
+    DLLs) at runtime via the default search order — which does NOT include the
+    wheels' ``nvidia/cudnn/bin`` dir. Without this registration that lazy load
+    fails with ``CUDNN_STATUS_SUBLIBRARY_LOADING_FAILED`` and ORT falls back to
+    CPU. Best-effort: a no-op when the wheels (or ``add_dll_directory``) are
+    absent, so CPU-only installs are unaffected.
+    """
+    if not hasattr(os, "add_dll_directory"):  # non-Windows
+        return
+    try:
+        import nvidia  # provided by the nvidia-*-cu12 wheels
+    except Exception:
+        return
+    base = os.path.dirname(nvidia.__file__)
+    try:
+        subdirs = os.listdir(base)
+    except OSError:
+        return
+    for sub in subdirs:
+        bin_dir = os.path.join(base, sub, "bin")
+        if os.path.isdir(bin_dir):
+            try:
+                os.add_dll_directory(bin_dir)
+            except OSError:
+                pass
+
+
+def _preload_cuda_dlls() -> None:
+    """Preload the CUDA/cuDNN DLLs shipped by the ``nvidia-*-cu12`` pip wheels so
+    onnxruntime-gpu's CUDAExecutionProvider can initialise.
+
+    onnxruntime-gpu's ``onnxruntime_providers_cuda.dll`` links against
+    ``cublasLt64_12.dll`` / ``cudnn*64_9.dll``; on Windows it does not search the
+    pip wheels' ``nvidia/*/bin`` dirs for these transitive dependencies, so the
+    provider fails to load and ORT silently falls back to CPU. ``preload_dlls()``
+    (onnxruntime-gpu >= 1.21) loads them explicitly from the installed wheels.
+
+    Best-effort and self-contained: on a CPU-only install ``preload_dlls`` is
+    absent or finds nothing, so this is a no-op and search runs on CPU as before.
+    """
+    try:
+        import onnxruntime as ort
+    except Exception:
+        return
+    preload = getattr(ort, "preload_dlls", None)
+    if preload is None:
+        return
+    try:
+        preload()
+    except Exception as e:  # pragma: no cover - defensive
+        logger.debug(f"onnxruntime.preload_dlls() skipped: {e}")
+
+
+# Must run before any InferenceSession is created (i.e. before InsightFace loads
+# its ONNX models), otherwise the CUDA provider cannot find its dependencies.
+# Order matters: register the search dirs first so cuDNN's lazily-loaded
+# sublibraries resolve, then preload the top-level CUDA/cuDNN DLLs.
+_register_cuda_dll_dirs()
+_preload_cuda_dlls()
 
 _face_app: Optional[Any] = None
 _active_provider: Optional[str] = None
