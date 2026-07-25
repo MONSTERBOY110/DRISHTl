@@ -1,6 +1,6 @@
 # DRISHTI - Lost Person Detection System
 
-Find a lost person in CCTV footage from a single photo. Drishti scans every video in the `CCTVS/` folder with a modern face-recognition pipeline and tells you **which camera** saw the person, **when**, and **how confident** the match is — and honestly says **"No Reliable Match"** when the evidence is weak, instead of showing the wrong person.
+Find a lost person in CCTV footage from a single photo. Drishti scans every video in the `CCTVS/` folder with a modern face-recognition pipeline and tells you **which camera** saw the person, **when**, and **how confident** the match is and honestly says **"No Reliable Match"** when the evidence is weak, instead of showing the wrong person.
 
 ## Tech Stack
 
