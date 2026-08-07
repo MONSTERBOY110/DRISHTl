@@ -33,6 +33,36 @@ def cosine(a, b) -> float:
     return float(np.dot(na, nb))
 
 
+def similarity_to_percent(sim: float) -> float:
+    """Map a cosine similarity to a calibrated 0-100 'match accuracy' %.
+
+    Cosine similarity is NOT a linear probability: genuine matches score
+    ~0.55-0.63 while imposters cap at ~0.49, so a naive ``sim * 100`` makes a
+    strong match read as a misleadingly low number. Instead this is a
+    piecewise-linear mapping anchored on the decision thresholds so a
+    strong-match cosine reads high and a possible-match cosine reads moderate.
+    Anchors are read from config so DRISHTI_* threshold overrides stay
+    consistent.
+    """
+    anchors = [
+        (0.0, 0.0),
+        (config.POSSIBLE_MATCH_THRESHOLD, 70.0),
+        (config.MATCH_THRESHOLD, 85.0),
+        (1.0, 100.0),
+    ]
+    # Keep anchors strictly increasing in x (guards against odd threshold overrides).
+    clean = [anchors[0]]
+    for x, y in anchors[1:]:
+        if x > clean[-1][0]:
+            clean.append((x, y))
+    s = max(0.0, min(1.0, float(sim)))
+    for (x0, y0), (x1, y1) in zip(clean, clean[1:]):
+        if s <= x1:
+            t = (s - x0) / (x1 - x0)
+            return round(y0 + t * (y1 - y0), 1)
+    return 100.0
+
+
 def decide_track_match(similarities: List[float]) -> Dict[str, object]:
     """
     Open-set decision for one track given its per-frame similarities.

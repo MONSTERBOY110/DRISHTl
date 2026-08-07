@@ -154,6 +154,7 @@ def search(target_path: str, video_paths: List[Path], search_id: str) -> Dict[st
             "best_crop": f"/api/snapshot/{crop_file}",
             "avg_similarity": float(verdict["avg_similarity"]),
             "best_similarity": best_sim,
+            "match_accuracy": matcher.similarity_to_percent(best_sim),
             "matched_frames": int(verdict["matched_frames"]),
             # ---- backward-compat fields (frontend) ----
             "camera": camera,

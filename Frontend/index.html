@@ -1534,6 +1534,7 @@
                         <div class="result-title">${match.camera_name || match.camera || "Unknown Camera"}</div>
                         <div class="result-data">
                             ${match.decision ? `<div class="result-row"><span>Match Strength</span><span>${matchStrengthLabel(match.decision)}</span></div>` : ""}
+                            ${match.match_accuracy !== undefined ? `<div class="result-row"><span>Match Accuracy</span><span>${Number(match.match_accuracy).toFixed(0)}%</span></div>` : ""}
                             ${match.best_similarity !== undefined ? `<div class="result-row"><span>Similarity Score</span><span>${Number(match.best_similarity).toFixed(2)}</span></div>` : ""}
                             ${match.matched_frames !== undefined ? `<div class="result-row"><span>Confirmed Frames</span><span>${match.matched_frames}</span></div>` : ""}
                             ${timeText ? `<div class="result-row"><span>Time</span><span>${timeText}</span></div>` : ""}
