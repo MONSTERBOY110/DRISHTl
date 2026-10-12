@@ -1,3 +1,89 @@
+# Drishti — find a lost person in the crowd from a photo *or just a description*
+
+At a Durga Puja pandal a child gets separated from her family. Her mother has one old photo and can tell you what the child is wearing. Most CCTV never sees a face, because cameras are high and people face away.
+
+Drishti indexes every camera's footage **once** into person tracks. Each track stores face embeddings when a face was visible, and clothing appearance always. A search is then a few vector products instead of re-scanning video:
+- **A photo** gives face-verified sightings.
+- **A description** like "yellow top, blue jeans" gives ranked *leads*, even when the face is never visible.
+- The sightings are joined into a cross-camera *last seen* trail.
+
+Leads are always labelled **unverified**. There is no fake "confidence %", and "No reliable match" is a valid answer.
+
+## Features
+
+| Feature | Where | Status |
+|---|---|---|
+| Photo → face search over recorded CCTV (open-set: Strong / Possible / No reliable match) | v0.5 core · `POST /api/search` · classic UI at `/` | built (v0.5) |
+| Phone / IP cameras as live feeds | v0.5 core · `/api/camera/*` | built (v0.5) |
+| **Index once, search instantly** (YOLO11n + ByteTrack people, InsightFace faces, OpenCLIP appearance) | `src/backend/v2/{indexer,store,search}.py` · `POST /api/v2/search` | built |
+| **Search by description, no face needed** (OpenCLIP text↔image + clothing-colour attributes) | `query_parser.py`, `appearance.py` | built, but broken for most queries right now: see Known issues 1 |
+| **Cross-camera "last seen" trail** with clock time and venue map | `search.build_trail` · `/v2/` | built |
+| **Missing-person cases** (register once with photo + description, search per case) | `/api/v2/cases` | backend built; cases panel in the control room not built yet |
+| **Live watchlist alerts** to volunteers' phones (SSE, optional Telegram) | `watchlist.py`, `/api/v2/alerts/stream` · `/v2/volunteer.html` | built |
+| **Voice / text intake** (Bangla, Hindi, English → structured description; Gemini if `GEMINI_API_KEY` is set, else rules) | `/api/v2/intake/transcribe`, `/api/v2/intake/parse` | built |
+| Control-room UI | `Frontend/v2/` at `/v2/` | built (search, results, trail); cases panel + polish pending |
+
+**What a description can say.** The parser understands English, romanised Hindi and romanised Bengali:
+- **Clothing:** colours and garment types, e.g. *laal / lal*, *neela / nil*, *peela / holud*, *kala / kalo*, *safed / shada*; t-shirt, jeans, frock, saree, kurta.
+- **Physical:** age (number, "child", "elderly"), build and height.
+- **Face and head:** beard (*dadi*), moustache (*mooch / gof*), glasses (*chashma / choshma*), cap (*topi / tupi*), turban, mask; hair colour, length and baldness (*kalo chul / kala baal*, *ganja / tak*).
+
+The parsed attributes add a bonus on top of the OpenCLIP text↔image ranking.
+
+## Quickstart
+
+```powershell
+py -3.11 -m venv venv              # Python 3.11, not 3.13/3.14 (insightface / onnxruntime wheels)
+venv\Scripts\activate
+pip install -r requirements.txt
+copy .env.example .env             # optional: GEMINI_API_KEY for voice intake, Telegram for alert push
+python run.py
+#   http://localhost:8000/v2/                  control room (v2)
+#   http://<LAN-IP>:8000/v2/volunteer.html     volunteer phone page
+#   http://localhost:8000/                     classic v0.5 UI
+#   http://localhost:8000/docs                 API docs
+
+# footage: put clips in CCTVS/ and copy docs/cameras.example.json to CCTVS/cameras.json
+# (no footage? python scripts/make_synthetic_clip.py writes a test clip)
+python -m src.backend.v2.indexer           # index once; unchanged files are skipped (--force to redo)
+python scripts/check_models.py             # loads InsightFace, YOLO11n, OpenCLIP; prints device + latency
+python scripts/smoke_v2.py [--photo face.jpg]   # health -> cameras -> index -> search, with timings
+python -m pytest tests -q                  # pure-logic tests, no model downloads
+```
+
+## Status
+
+### Known issues
+Checked 13 Oct 2026 with `python -m pytest tests -q`: **30 passed, 10 failed, 5 errors.**
+1. **Description search crashes for most queries.** `src/backend/v2/query_parser.py:182` uses `_AGE_PLAIN`, which is never defined. `parse()` raises `NameError` for any description without an explicit "N years". This also breaks text intake (7 tests).
+2. **`google-genai` isn't installed** in the current venv, though it is in `requirements.txt` (3 intake tests). Fix: `pip install -r requirements.txt`.
+3. **5 intake route tests error.** The venv has `httpx` 0.28.1 with `starlette` 0.27, whose `TestClient` passes `app=`, which httpx 0.28 removed. Fix: pin `httpx<0.28`, or upgrade fastapi/starlette.
+4. **torch in the venv is CPU-only** (`2.6.0+cpu`), so YOLO and OpenCLIP run on CPU; InsightFace already uses CUDA. Fix: `pip install torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu124`.
+
+### Next steps
+- Calibrate description search on multi-camera footage, then set `ATTR_BONUS_Z`, `LEAD_MIN_Z` and `TRAIL_MIN_Z`. `docs/CALIBRATION.md` has a partial one-camera result only.
+- Build the cases panel in the control room (`Frontend/v2/cases.js`: list/create cases, "Search this case", index progress).
+- Polish the UI for 1366×768, keyboard use and zero console errors.
+- Benchmark v0.5 `POST /api/search` against v2 `POST /api/v2/search` on the same clips.
+
+### Measured so far
+On one test camera, CPU only, 10 Oct 2026 (details in `docs/CALIBRATION.md`):
+- Indexing took 523 s for a 2,259-frame clip (753 frames sampled).
+- Description search took 37–43 ms once OpenCLIP was loaded, and 5.8 s for the first query.
+
+## Documentation
+- [`docs/TRD.md`](docs/TRD.md): architecture, module map, API contract, pipelines, config.
+- [`docs/PRD.md`](docs/PRD.md): problem, users, features, acceptance criteria, privacy commitments.
+- [`docs/CALIBRATION.md`](docs/CALIBRATION.md): description-search measurements and how to calibrate.
+- [`AGENTS.md`](AGENTS.md): rules for coding agents working on this repo.
+- v0.5 docs: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`docs/QUICK_START.md`](docs/QUICK_START.md), [`docs/QUICK_START_CCTV.md`](docs/QUICK_START_CCTV.md), [`DEPLOYMENT.md`](DEPLOYMENT.md), [`RECOGNITION_UPGRADE.md`](RECOGNITION_UPGRADE.md), [`DRISHTI_LIVE_PHONE_CAMERA_PLAN.md`](DRISHTI_LIVE_PHONE_CAMERA_PLAN.md).
+
+---
+
+## Drishti v0.5 (original version)
+
+> The original v0.5 README follows unchanged. The classic UI and `POST /api/search` it describes still run alongside v2.
+
 # DRISHTI - Lost Person Detection System
 
 Find a lost person in CCTV footage from a single photo. Drishti scans every video in the `CCTVS/` folder with a modern face-recognition pipeline and tells you **which camera** saw the person, **when**, and **how confident** the match is and honestly says **"No Reliable Match"** when the evidence is weak, instead of showing the wrong person.

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRISHTI v2 Control Room</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="../assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./styles.css?v=2.2">
+</head>
+<body>
+    <main class="app-shell">
+        <section class="camera-panel">
+            <header class="topbar">
+                <div class="brand">
+                    <img src="../assets/Logo.png" alt="DRISHTI" class="brand-logo">
+                    <div>
+                        <div class="brand-name">DRISHTI 2.0</div>
+                        <div class="brand-subtitle" id="healthLine">Checking system...</div>
+                    </div>
+                </div>
+                <div class="topbar-actions">
+                    <a class="icon-link" href="/" title="Open classic UI" aria-label="Open classic UI">
+                        <i class="fas fa-home"></i>
+                    </a>
+                    <button class="icon-button" id="reindexButton" type="button" title="Rebuild index" aria-label="Rebuild index">
+                        <i class="fas fa-rotate"></i>
+                    </button>
+                </div>
+            </header>
+
+            <section class="camera-grid" id="cameraGrid" aria-label="CCTV camera feeds"></section>
+
+            <section class="trail-panel">
+                <div class="section-head">
+                    <h2>Last Seen Trail</h2>
+                    <div id="lastSeenText">No search yet.</div>
+                </div>
+                <div class="trail-layout">
+                    <svg class="venue-map" id="venueMap" viewBox="0 0 100 100" role="img" aria-label="Venue trail map"></svg>
+                    <ol class="trail-list" id="trailList"></ol>
+                </div>
+            </section>
+        </section>
+
+        <aside class="search-panel">
+            <header>
+                <h1>Find Your Lost Person</h1>
+                <p>Search by photo, description, or both. Appearance-only matches are shown as leads for human verification.</p>
+            </header>
+
+            <label class="upload-area" id="uploadArea">
+                <input type="file" id="photoInput" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+                <div class="upload-empty" id="uploadEmpty">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <strong>Drop photo here</strong>
+                    <span>or click to upload</span>
+                </div>
+                <div class="upload-preview hidden" id="uploadPreview">
+                    <img id="previewImage" alt="Selected person photo">
+                    <div>
+                        <strong id="fileName">No file selected</strong>
+                        <span id="fileSize"></span>
+                    </div>
+                    <button type="button" id="removePhotoButton" class="remove-photo-btn" title="Remove photo">
+                        <i class="fas fa-times"></i> Remove photo
+                    </button>
+                </div>
+            </label>
+
+            <div class="description-input-wrap">
+                <label for="descriptionInput" class="field-label">
+                    <i class="fas fa-file-alt"></i>
+                    Describe Lost Person
+                </label>
+                <div class="textarea-mic-container">
+                    <textarea
+                        id="descriptionInput"
+                        name="description"
+                        placeholder="e.g. child, 6 years old, yellow top, blue jeans, short black hair, glasses, cap (English, Hindi, Bengali words supported)"
+                        rows="3"
+                    ></textarea>
+                    <button id="micButton" type="button" class="mic-btn" title="Click to speak" aria-label="Click to speak">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="camera-filter" id="cameraFilter" aria-label="Camera filter"></div>
+
+            <button class="find-btn" id="findButton" type="button">
+                <i class="fas fa-magnifying-glass"></i>
+                Find Person
+            </button>
+            <div class="status-text" id="statusText"></div>
+
+            <section class="results-panel">
+                <div class="section-head">
+                    <h2>Results</h2>
+                    <div id="timingText">Waiting for search.</div>
+                </div>
+                <div class="result-group">
+                    <h3>Verified</h3>
+                    <div class="result-list" id="verifiedList"></div>
+                </div>
+                <div class="result-group">
+                    <h3>Leads (unverified)</h3>
+                    <div class="result-list" id="leadList"></div>
+                </div>
+            </section>
+        </aside>
+    </main>
+
+    <script type="module" src="./search.js?v=2.2"></script>
+</body>
+</html>

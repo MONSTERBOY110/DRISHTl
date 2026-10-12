@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Drishti 2.0 — Volunteer Alert Radar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Press+Start+2P&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+    <style>
+        :root {
+            --dark: #121420;
+            --panel: #1e2133;
+            --panel-2: #161827;
+            --panel-border: #2e334d;
+            --muted: #8d99ae;
+            --cream: #fdf0d5;
+            --red: #ef233c;
+            --deep-red: #d90429;
+            --red-glow: rgba(239, 35, 60, 0.35);
+            --green: #10b981;
+            --green-glow: rgba(16, 185, 129, 0.35);
+            --amber: #f59e0b;
+            --black: #08090f;
+            --shadow: 3px 3px 0 #08090f;
+            --card-radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--dark);
+            color: var(--cream);
+            font-family: "Inter", sans-serif;
+            padding-bottom: 70px;
+            overflow-x: hidden;
+        }
+
+        /* Top Header */
+        header.app-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(22, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--panel-border);
+            padding: 12px 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .brand-logo {
+            width: 34px;
+            height: 34px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid var(--muted);
+            background: var(--black);
+        }
+
+        .brand-title {
+            font-family: "Press Start 2P", monospace;
+            font-size: 13px;
+            color: var(--cream);
+            letter-spacing: 0.05em;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .brand-subtitle {
+            font-family: "Inter", sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--red);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-family: "Press Start 2P", monospace;
+            font-size: 8px;
+            border: 1px solid var(--panel-border);
+            background: var(--panel-2);
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .status-pill.live {
+            border-color: var(--green);
+            color: var(--green);
+            box-shadow: 0 0 8px var(--green-glow);
+        }
+
+        .status-pill.reconnecting {
+            border-color: var(--amber);
+            color: var(--amber);
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse-dot 1.5s infinite;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(0.85);
+            }
+        }
+
+        /* Controls Strip */
+        .controls-strip {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .callsign-box {
+            display: flex;
+            align-items: center;
+            background: var(--panel-2);
+            border: 1px solid var(--panel-border);
+            border-radius: 6px;
+            padding: 4px 8px;
+            gap: 6px;
+        }
+
+        .callsign-box label {
+            font-family: "Press Start 2P", monospace;
+            font-size: 7px;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .callsign-input {
+            background: transparent;
+            border: none;
+            color: var(--cream);
+            font-size: 12px;
+            font-weight: 600;
+            width: 100%;
+            outline: none;
+        }
+
+        .btn-alerts-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--red);
+            color: var(--cream);
+            border: 1px solid var(--cream);
+            border-radius: 6px;
+            padding: 7px 11px;
+            font-family: "Press Start 2P", monospace;
+            font-size: 8px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-alerts-toggle.active {
+            background: var(--panel-2);
+            border-color: var(--green);
+            color: var(--green);
+            box-shadow: none;
+        }
+
+        .btn-alerts-toggle:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0 #08090f;
+        }
+
+        /* Stats Ribbon */
+        .stats-ribbon {
+            display: flex;
+            padding: 10px 16px;
+            gap: 8px;
+            background: var(--panel-2);
+            border-bottom: 1px solid var(--panel-border);
+            overflow-x: auto;
+        }
+
+        .stat-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            border-radius: 6px;
+            padding: 6px 4px;
+            min-width: 80px;
+        }
+
+        .stat-val {
+            font-family: "Press Start 2P", monospace;
+            font-size: 14px;
+            color: var(--cream);
+        }
+
+        .stat-val.active-count {
+            color: var(--red);
+        }
+
+        .stat-val.found-count {
+            color: var(--green);
+        }
+
+        .stat-lbl {
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            padding: 12px 16px 4px 16px;
+            gap: 8px;
+        }
+
+        .filter-btn {
+            background: var(--panel);
+            color: var(--muted);
+            border: 1px solid var(--panel-border);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-family: "Press Start 2P", monospace;
+            font-size: 8px;
+            cursor: pointer;
+        }
+
+        .filter-btn.active {
+            background: var(--red);
+            color: var(--cream);
+            border-color: var(--red);
+            box-shadow: var(--shadow);
+        }
+
+        /* Feed Container */
+        .feed-container {
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 48px 16px;
+            background: var(--panel);
+            border: 2px dashed var(--panel-border);
+            border-radius: var(--card-radius);
+            gap: 14px;
+        }
+
+        .radar-scanner {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid var(--red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 0 15px var(--red-glow);
+        }
+
+        .radar-scanner i {
+            font-size: 22px;
+            color: var(--red);
+        }
+
+        .radar-scanner::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--red);
+            animation: radar-ping 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+        }
+
+        @keyframes radar-ping {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1.8);
+                opacity: 0;
+            }
+        }
+
+        .empty-title {
+            font-family: "Press Start 2P", monospace;
+            font-size: 11px;
+            color: var(--cream);
+        }
+
+        .empty-desc {
+            font-size: 12px;
+            color: var(--muted);
+            max-width: 280px;
+            line-height: 1.4;
+        }
+
+        /* Alert Card — compact, image-focused */
+        .alert-card {
+            background: var(--panel);
+            border: 2px solid var(--panel-border);
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, border-color 0.2s;
+            position: relative;
+        }
+
+        .alert-card.new-alert {
+            border-color: var(--red);
+            animation: card-flash 1.5s ease-out;
+        }
+
+        @keyframes card-flash {
+            0% { box-shadow: 0 0 25px var(--red-glow); border-color: #ff3b5c; }
+            100% { box-shadow: var(--shadow); border-color: var(--panel-border); }
+        }
+
+        .alert-card.status-found { border-color: var(--green); opacity: 0.85; }
+        .alert-card.status-ack { border-color: #3b82f6; }
+        .alert-card.status-false_alarm { opacity: 0.6; filter: grayscale(0.5); }
+
+        /* Hero media — camera snapshot with face crop inset */
+        .card-media-hero {
+            position: relative;
+            width: 100%;
+            height: 210px;
+            background: var(--black);
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .card-media-hero img.hero-snapshot {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.2s;
+        }
+
+        .card-media-hero:active img.hero-snapshot { transform: scale(1.03); }
+
+        /* Face crop inset */
+        .face-inset {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            width: 72px;
+            height: 72px;
+            border-radius: 6px;
+            border: 2px solid var(--red);
+            background: var(--black);
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.7);
+        }
+
+        .face-inset img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .face-inset-label {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(0,0,0,0.8);
+            font-family: "Press Start 2P", monospace;
+            font-size: 5px;
+            text-align: center;
+            padding: 2px;
+            color: var(--cream);
+        }
+
+        /* Badge overlay on top of hero */
+        .hero-overlay-top {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 8px;
+            background: linear-gradient(to bottom, rgba(8,9,15,0.85) 0%, transparent 100%);
+        }
+
+        .hero-badges { display: flex; gap: 4px; flex-wrap: wrap; }
+
+        .badge {
+            font-family: "Press Start 2P", monospace;
+            font-size: 6px;
+            padding: 3px 5px;
+            border-radius: 3px;
+            letter-spacing: 0.04em;
+        }
+
+        .badge-match { background: var(--red); color: var(--cream); border: 1px solid #ff4d6d; }
+        .badge-decision { background: var(--black); color: var(--cream); border: 1px solid var(--muted); }
+        .badge-decision.strong { border-color: var(--red); color: #ff8597; }
+        .badge-live { background: rgba(239,35,60,0.15); color: var(--red); border: 1px solid var(--red); }
+
+        .card-time {
+            font-family: "Press Start 2P", monospace;
+            font-size: 6px;
+            color: rgba(253,240,213,0.8);
+            white-space: nowrap;
+        }
+
+        /* Compact info strip below hero */
+        .card-info-strip {
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            background: var(--panel-2);
+            border-top: 1px solid var(--panel-border);
+        }
+
+        .info-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .case-name {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--cream);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .case-location {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        .case-location i { color: var(--red); font-size: 9px; }
+
+        .sim-pill {
+            flex-shrink: 0;
+            font-family: "Press Start 2P", monospace;
+            font-size: 8px;
+            padding: 5px 8px;
+            border-radius: 4px;
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            color: var(--green);
+            white-space: nowrap;
+        }
+
+        .sim-pill.strong { border-color: var(--red); color: #ff8597; background: rgba(239,35,60,0.1); }
+
+        /* Compact action bar */
+        .card-actions {
+            padding: 6px 10px;
+            background: var(--panel);
+            border-top: 1px solid var(--panel-border);
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-action {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 7px 4px;
+            border-radius: 5px;
+            font-family: "Press Start 2P", monospace;
+            font-size: 6px;
+            cursor: pointer;
+            border: 1px solid var(--panel-border);
+            background: var(--panel-2);
+            color: var(--cream);
+            transition: all 0.15s;
+        }
+
+        .btn-action:active { transform: translateY(2px); }
+        .btn-ack { border-color: #3b82f6; color: #93c5fd; }
+
+        .btn-found {
+            background: var(--green);
+            color: var(--black);
+            border-color: #34d399;
+            font-weight: 800;
+            box-shadow: 0 2px 6px var(--green-glow);
+            flex: 1.3;
+        }
+
+        .btn-false { border-color: var(--panel-border); color: var(--muted); }
+
+        /* Status Strip (resolved cards) */
+        .card-status-strip {
+            padding: 6px 10px;
+            background: var(--panel-2);
+            border-top: 1px solid var(--panel-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 9px;
+        }
+
+        .status-msg { display: flex; align-items: center; gap: 5px; font-weight: 600; }
+        .status-msg.found { color: var(--green); }
+        .status-msg.ack { color: #60a5fa; }
+        .status-msg.false_alarm { color: var(--muted); }
+
+        /* Modal Lightbox */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(8, 9, 15, 0.95);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .lightbox-modal.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 100%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+            border: 2px solid var(--panel-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+            object-fit: contain;
+        }
+
+        .btn-close-lightbox {
+            align-self: flex-end;
+            background: var(--red);
+            color: var(--cream);
+            border: 1px solid var(--cream);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-family: "Press Start 2P", monospace;
+            font-size: 9px;
+            cursor: pointer;
+        }
+
+        /* Bottom Fixed Bar */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 48px;
+            background: var(--panel-2);
+            border-top: 1px solid var(--panel-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            z-index: 90;
+        }
+
+        .bottom-info {
+            font-size: 10px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bottom-link {
+            color: var(--cream);
+            text-decoration: none;
+            font-family: "Press Start 2P", monospace;
+            font-size: 7px;
+            padding: 6px 8px;
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-top">
+            <a href="/v2/volunteer.html" class="brand">
+                <img src="/assets/Logo.png" alt="Drishti" class="brand-logo" onerror="this.src='/assets/favicon.ico'">
+                <div class="brand-title">
+                    <span>DRISHTI 2.0</span>
+                    <span class="brand-subtitle">VOLUNTEER RADAR</span>
+                </div>
+            </a>
+            <div id="connection-pill" class="status-pill">
+                <span class="status-dot"></span>
+                <span id="connection-text">CONNECTING</span>
+            </div>
+        </div>
+
+        <div class="controls-strip">
+            <div class="callsign-box">
+                <label for="callsign-input"><i class="fa-solid fa-id-badge"></i> UNIT:</label>
+                <input type="text" id="callsign-input" class="callsign-input" value="Volunteer 1" maxlength="24"
+                    placeholder="Your name / unit">
+            </div>
+            <button id="btn-alerts-toggle" class="btn-alerts-toggle">
+                <i class="fa-solid fa-bell"></i>
+                <span id="alerts-toggle-text">ENABLE ALERTS</span>
+            </button>
+            <button id="btn-test-alert" class="btn-alerts-toggle" style="background: #1e3a8a; border-color: #60a5fa;"
+                title="Trigger a real-time test alert">
+                <i class="fa-solid fa-bolt"></i>
+                <span>TEST PING</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Stats Ribbon -->
+    <section class="stats-ribbon">
+        <div class="stat-item">
+            <span id="stat-active" class="stat-val active-count">0</span>
+            <span class="stat-lbl">Active</span>
+        </div>
+        <div class="stat-item">
+            <span id="stat-found" class="stat-val found-count">0</span>
+            <span class="stat-lbl">Found</span>
+        </div>
+        <div class="stat-item">
+            <span id="stat-total" class="stat-val">0</span>
+            <span class="stat-lbl">Total</span>
+        </div>
+    </section>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+        <button class="filter-btn active" data-filter="all">ALL (<span id="count-all">0</span>)</button>
+        <button class="filter-btn" data-filter="active">ACTIVE (<span id="count-active">0</span>)</button>
+        <button class="filter-btn" data-filter="resolved">RESOLVED (<span id="count-resolved">0</span>)</button>
+    </div>
+
+    <!-- Alert Cards Feed -->
+    <main class="feed-container" id="alerts-feed">
+        <!-- Empty State (default) -->
+        <div class="empty-state" id="empty-state">
+            <div class="radar-scanner">
+                <i class="fa-solid fa-satellite-dish"></i>
+            </div>
+            <div class="empty-title">RADAR ACTIVE</div>
+            <div class="empty-desc">
+                Monitoring live CCTV and phone cameras for open missing cases. Instant alerts will appear here.
+            </div>
+        </div>
+    </main>
+
+    <!-- Image Lightbox Modal -->
+    <div class="lightbox-modal" id="lightbox-modal">
+        <div class="lightbox-content">
+            <button class="btn-close-lightbox" id="btn-close-lightbox"><i class="fa-solid fa-xmark"></i> CLOSE</button>
+            <img src="" alt="Enlarged snapshot" class="lightbox-img" id="lightbox-img">
+        </div>
+    </div>
+
+    <!-- Bottom Status Bar -->
+    <footer class="bottom-bar">
+        <div class="bottom-info">
+            <i class="fa-solid fa-tower-broadcast"></i>
+            <span id="heartbeat-info">Heartbeat: waiting</span>
+        </div>
+        <a href="/" class="bottom-link">
+            <i class="fa-solid fa-display"></i>
+            <span>MAIN UI</span>
+        </a>
+    </footer>
+
+    <!-- Script -->
+    <script type="module" src="/v2/volunteer.js"></script>
+</body>
+
+</html>

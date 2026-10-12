@@ -1,0 +1,38 @@
+{
+  "success": true,
+  "cameras": [
+    {
+      "id": "cam1",
+      "name": "CCTV 1",
+      "location": "Main Gate",
+      "source": "file",
+      "video_url": "/api/cctv-video/cam1_gate.mp4",
+      "start_time": "2026-10-10T17:02:00+05:30",
+      "map": { "x": 0.18, "y": 0.72 },
+      "indexed": true,
+      "tracks": 140
+    },
+    {
+      "id": "cam2",
+      "name": "CCTV 2",
+      "location": "Food Lane",
+      "source": "file",
+      "video_url": "/api/cctv-video/cam2_food.mp4",
+      "start_time": "2026-10-10T17:02:00+05:30",
+      "map": { "x": 0.52, "y": 0.46 },
+      "indexed": true,
+      "tracks": 151
+    },
+    {
+      "id": "cam3",
+      "name": "CCTV 3",
+      "location": "Stage Exit",
+      "source": "file",
+      "video_url": "/api/cctv-video/cam3_stage.mp4",
+      "start_time": "2026-10-10T17:02:00+05:30",
+      "map": { "x": 0.78, "y": 0.24 },
+      "indexed": true,
+      "tracks": 121
+    }
+  ]
+}

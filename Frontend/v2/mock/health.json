@@ -1,0 +1,15 @@
+{
+  "success": true,
+  "version": "2.0",
+  "index": {
+    "cameras": 3,
+    "tracks": 412,
+    "last_indexed_at": "2026-10-10T19:40:00+05:30"
+  },
+  "models": {
+    "face": "buffalo_l",
+    "person": "yolo11n",
+    "appearance": "ViT-B-32/laion2b_s34b_b79k"
+  },
+  "provider": "CUDAExecutionProvider"
+}

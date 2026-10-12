@@ -1,0 +1,90 @@
+{
+  "success": true,
+  "query": {
+    "has_photo": true,
+    "photo_face_found": true,
+    "description": "yellow top, blue jeans, black cap",
+    "parsed": {
+      "upper": ["yellow"],
+      "lower": ["blue"],
+      "keywords": ["cap"],
+      "age_hint": null
+    }
+  },
+  "decision": "match_found",
+  "verified": [
+    {
+      "sighting_id": "t_12",
+      "track_id": 12,
+      "camera_id": "cam1",
+      "camera_name": "CCTV 1",
+      "location": "Main Gate",
+      "t_start": 13.2,
+      "t_end": 19.0,
+      "t_start_hms": "00:00:13",
+      "wall_time": "2026-10-10T17:02:13+05:30",
+      "face": { "decision": "strong_match", "best_similarity": 0.61, "matched_frames": 3 },
+      "appearance": { "score": 0.29, "z": 2.1, "rank": 1, "attribute_hits": ["upper:yellow", "lower:blue"] },
+      "evidence": "face",
+      "best_crop": "/api/v2/media/crops/mock_cam1_t12.jpg",
+      "best_frame": "/api/v2/media/frames/mock_cam1_t12.jpg",
+      "clip_url": "/api/cctv-video/cam1_gate.mp4#t=13.2"
+    }
+  ],
+  "leads": [
+    {
+      "sighting_id": "t_37",
+      "track_id": 37,
+      "camera_id": "cam2",
+      "camera_name": "CCTV 2",
+      "location": "Food Lane",
+      "t_start": 41.3,
+      "t_end": 47.9,
+      "t_start_hms": "00:00:41",
+      "wall_time": "2026-10-10T17:02:41+05:30",
+      "face": null,
+      "appearance": { "score": 0.297, "z": 2.4, "rank": 1, "attribute_hits": ["upper:yellow", "lower:blue"] },
+      "evidence": "appearance",
+      "best_crop": "/api/v2/media/crops/mock_cam2_t37.jpg",
+      "best_frame": "/api/v2/media/frames/mock_cam2_t37.jpg",
+      "clip_url": "/api/cctv-video/cam2_food.mp4#t=41.3"
+    }
+  ],
+  "trail": [
+    {
+      "camera_id": "cam1",
+      "camera_name": "CCTV 1",
+      "location": "Main Gate",
+      "map": { "x": 0.18, "y": 0.72 },
+      "t_start": 13.2,
+      "t_end": 19.0,
+      "wall_time": "2026-10-10T17:02:13+05:30",
+      "evidence": "face",
+      "sighting_ids": ["t_12"]
+    },
+    {
+      "camera_id": "cam2",
+      "camera_name": "CCTV 2",
+      "location": "Food Lane",
+      "map": { "x": 0.52, "y": 0.46 },
+      "t_start": 41.3,
+      "t_end": 47.9,
+      "wall_time": "2026-10-10T17:02:41+05:30",
+      "evidence": "appearance",
+      "sighting_ids": ["t_37"]
+    }
+  ],
+  "last_seen": {
+    "camera_id": "cam2",
+    "camera_name": "CCTV 2",
+    "location": "Food Lane",
+    "map": { "x": 0.52, "y": 0.46 },
+    "t_start": 41.3,
+    "t_end": 47.9,
+    "wall_time": "2026-10-10T17:02:41+05:30",
+    "evidence": "appearance",
+    "sighting_ids": ["t_37"]
+  },
+  "timings": { "search_ms": 84, "tracks_scanned": 412 },
+  "message": "Verified in 1 camera, 1 appearance lead."
+}

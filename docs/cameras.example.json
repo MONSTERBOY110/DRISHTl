@@ -1,0 +1,33 @@
+{
+  "venue": "Demo pandal (team-recorded footage)",
+  "map_image": null,
+  "cameras": [
+    {
+      "id": "cam1",
+      "file": "cam1_gate.mp4",
+      "name": "CCTV 1",
+      "location": "Main Gate",
+      "start_time": "2026-10-10T17:02:00+05:30",
+      "map": { "x": 0.15, "y": 0.75 }
+    },
+    {
+      "id": "cam2",
+      "file": "cam2_food_lane.mp4",
+      "name": "CCTV 2",
+      "location": "Food Lane",
+      "start_time": "2026-10-10T17:03:00+05:30",
+      "map": { "x": 0.50, "y": 0.45 }
+    },
+    {
+      "id": "cam3",
+      "file": "cam3_stage_exit.mp4",
+      "name": "CCTV 3",
+      "location": "Stage Exit",
+      "start_time": "2026-10-10T17:05:00+05:30",
+      "map": { "x": 0.85, "y": 0.20 }
+    }
+  ],
+  "live": [
+    { "id": "live1", "name": "Phone Cam", "location": "Stage Exit", "map": { "x": 0.88, "y": 0.28 } }
+  ]
+}

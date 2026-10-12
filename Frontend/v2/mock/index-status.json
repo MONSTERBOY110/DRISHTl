@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "state": "done",
+  "done": 3,
+  "total": 3,
+  "current_camera": null,
+  "tracks_indexed": 412,
+  "elapsed_s": 41.2,
+  "error": null
+}

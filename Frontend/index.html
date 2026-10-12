@@ -106,7 +106,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .brand-header {
@@ -114,6 +114,18 @@
             align-items: center;
             gap: 10px;
             min-width: 0;
+        }
+
+        .brand-title-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .brand-subtitle {
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 0.02em;
         }
 
         .brand-logo {
@@ -134,6 +146,41 @@
             letter-spacing: 0.04em;
         }
 
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .reindex-btn {
+            flex: 0 0 auto;
+            min-height: 28px;
+            background: var(--panel-2);
+            color: var(--cream);
+            border: 1px solid var(--muted);
+            border-radius: 6px;
+            padding: 5px 10px;
+            font-family: "Press Start 2P", monospace;
+            font-size: 8px;
+            line-height: 1.3;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 180ms ease;
+        }
+
+        .reindex-btn:hover:not(:disabled) {
+            border-color: var(--cream);
+            box-shadow: 0 0 10px rgba(253, 240, 213, 0.15);
+        }
+
+        .reindex-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .connect-cctv-btn {
             flex: 0 0 auto;
             min-height: 28px;
@@ -146,6 +193,9 @@
             font-size: 8px;
             line-height: 1.3;
             cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             transition: background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
         }
 
@@ -468,6 +518,34 @@
             overflow: hidden;
         }
 
+        .remove-photo-cross {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(32, 34, 53, 0.92);
+            color: var(--cream);
+            border: 1px solid var(--muted);
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 1;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+            transition: all 160ms ease;
+        }
+
+        .remove-photo-cross:hover {
+            background: var(--red);
+            border-color: var(--cream);
+            transform: scale(1.1);
+        }
+
         .upload-area:hover {
             border-color: var(--red);
         }
@@ -531,6 +609,101 @@
 
         #photoInput {
             display: none;
+        }
+
+        .description-input-wrap {
+            display: grid;
+            gap: 8px;
+        }
+
+        .field-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: "Press Start 2P", monospace;
+            font-size: 9px;
+            line-height: 1.5;
+            color: var(--cream);
+            text-transform: uppercase;
+        }
+
+        .textarea-mic-container {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 46px;
+            gap: 8px;
+            align-items: stretch;
+        }
+
+        #descriptionInput {
+            width: 100%;
+            min-height: 84px;
+            max-height: 160px;
+            resize: none;
+            background: var(--panel-2);
+            color: var(--cream);
+            border: 1px solid var(--muted);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 13px;
+            line-height: 1.5;
+            outline: none;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(141, 153, 174, 0.35) transparent;
+            transition: border-color 160ms ease, box-shadow 160ms ease;
+        }
+
+        #descriptionInput::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #descriptionInput::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #descriptionInput::-webkit-scrollbar-thumb {
+            background: rgba(141, 153, 174, 0.35);
+            border-radius: 3px;
+        }
+
+        #descriptionInput::-webkit-scrollbar-thumb:hover {
+            background: rgba(141, 153, 174, 0.65);
+        }
+
+        #descriptionInput::placeholder {
+            color: rgba(141, 153, 174, 0.82);
+        }
+
+        #descriptionInput:focus {
+            border-color: var(--red);
+            box-shadow: 0 0 0 2px rgba(239, 35, 60, 0.18);
+        }
+
+        .mic-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 46px;
+            background: var(--panel-2);
+            color: var(--cream);
+            border: 1px solid var(--muted);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+        }
+
+        .mic-btn:hover:not(:disabled),
+        .mic-btn.listening {
+            border-color: var(--red);
+            box-shadow: 0 0 12px rgba(239, 35, 60, 0.28);
+        }
+
+        .mic-btn.listening {
+            background: var(--red);
+        }
+
+        .mic-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .find-btn {
@@ -908,9 +1081,19 @@
             <div class="cctv-panel-topbar">
                 <div class="brand-header">
                     <img class="brand-logo" src="./assets/Logo.png" alt="Drishti logo">
-                    <span class="brand-title">Drishti</span>
+                    <div class="brand-title-wrap">
+                        <span class="brand-title">Drishti</span>
+                        <div class="brand-subtitle" id="healthLine">System ready</div>
+                    </div>
                 </div>
-                <button class="connect-cctv-btn" id="connectCctvButton" type="button">Connect CCTV</button>
+                <div class="topbar-actions">
+                    <button class="reindex-btn" id="reindexButton" type="button" title="Rebuild search index">
+                        <i class="fas fa-rotate"></i> Reindex
+                    </button>
+                    <button class="connect-cctv-btn" id="connectCctvButton" type="button">
+                        <i class="fas fa-video"></i> Connect CCTV
+                    </button>
+                </div>
             </div>
             <div class="panel-label">CCTV FEEDS</div>
             <!-- CCTV feed cards are rendered dynamically from GET /api/cameras
@@ -932,6 +1115,7 @@
 
             <label class="upload-area" id="uploadArea">
                 <input type="file" id="photoInput" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+                <button type="button" id="removePhotoBtn" class="remove-photo-cross" title="Remove photo" aria-label="Remove photo">&times;</button>
                 <div class="upload-default" id="uploadDefault">
                     <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
                     <div class="upload-main">Drop image here</div>
@@ -946,6 +1130,24 @@
                     </div>
                 </div>
             </label>
+
+            <div class="description-input-wrap">
+                <label for="descriptionInput" class="field-label">
+                    <i class="fas fa-file-alt"></i>
+                    Describe Lost Person
+                </label>
+                <div class="textarea-mic-container">
+                    <textarea
+                        id="descriptionInput"
+                        name="description"
+                        placeholder="e.g. child, 6 years old, yellow top, blue jeans, short black hair, glasses, cap (English, Hindi, Bengali words supported)"
+                        rows="3"
+                    ></textarea>
+                    <button id="micButton" type="button" class="mic-btn" title="Click to speak">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+            </div>
 
             <button class="find-btn" id="findButton" type="button">Find Person</button>
             <div class="status-text" id="statusText"></div>
@@ -1052,12 +1254,17 @@
 
         const uploadArea = document.getElementById("uploadArea");
         const photoInput = document.getElementById("photoInput");
+        const removePhotoBtn = document.getElementById("removePhotoBtn");
         const previewSection = document.getElementById("previewSection");
         const previewImage = document.getElementById("previewImage");
         const uploadDefault = document.getElementById("uploadDefault");
         const fileName = document.getElementById("fileName");
         const fileSize = document.getElementById("fileSize");
+        const reindexButton = document.getElementById("reindexButton");
+        const healthLine = document.getElementById("healthLine");
         const findButton = document.getElementById("findButton");
+        const descriptionInput = document.getElementById("descriptionInput");
+        const micButton = document.getElementById("micButton");
         const statusText = document.getElementById("statusText");
         const characterBox = document.getElementById("characterBox");
         const characterStatus = document.getElementById("characterStatus");
@@ -1085,6 +1292,7 @@
         let operatorResetTimer = null;
         let activeSearchToken = 0;
         let operatorMode = "idle";
+        let speechRecognition = null;
         const cctvStorageKey = "drishtiConnectedCctvSources";
 
         // Backend base URL: same-origin when served by FastAPI locally, otherwise
@@ -1307,7 +1515,11 @@
         // Search only the recent window of the connected live camera's buffer.
         async function searchLiveCamera() {
             if (!liveCameraId) return;
-            if (!selectedFile) { setStatus("Please select a photo first.", "error"); return; }
+            const description = (descriptionInput ? descriptionInput.value : "").trim();
+            if (!selectedFile && !description) {
+                setStatus("Please select a photo or enter a description to search the live camera.", "error");
+                return;
+            }
 
             const duration = liveDurationSelect ? Number(liveDurationSelect.value) : 10;
 
@@ -1315,42 +1527,60 @@
             resetFeedStates();
             clearResultsSection();
             resultsSection.classList.add("show");
-            resultsMeta.textContent = `Searching the last ${duration}s of the live feed…`;
+            resultsMeta.textContent = `Searching recent frames from ${liveCameraId}…`;
             setProcessingState(true);
             liveSearchButton.disabled = true;
             liveSearchButton.textContent = "Searching live…";
 
             try {
-                const fd = new FormData();
-                fd.append("file", selectedFile);
-                fd.append("camera_id", liveCameraId);
-                fd.append("duration_seconds", String(duration));
-                const res = await fetch(`${BACKEND_URL}/api/search/live-buffer`, { method: "POST", body: fd });
-                const data = await res.json();
-                setProcessingState(false);
+                if (description) {
+                    // Description search (or photo + description) on live camera feed via v2 engine
+                    const fd = new FormData();
+                    if (selectedFile) fd.append("photo", selectedFile);
+                    fd.append("description", description);
+                    fd.append("cameras", liveCameraId);
 
-                const r = data.results || {};
-                if (r.decision === "match_found" && (r.matches || []).length) {
-                    resetFeedStates();
-                    applyMatches(r.matches);
-                    renderResultsList(r.matches);
-                    const best = r.matches[0];
-                    resultsMeta.textContent =
-                        `Match Found in Recent Live Feed · Age: ${best.age_seconds ?? "?"}s ago · ` +
-                        `Search Window: last ${duration}s`;
-                    setOperatorSuccess(`Live match: ${matchStrengthLabel(best.decision)} ` +
-                        `(similarity ${Number(best.best_similarity ?? 0).toFixed(2)}, ${best.age_seconds}s ago).`);
+                    const res = await fetch(`${BACKEND_URL}/api/v2/search`, { method: "POST", body: fd });
+                    const data = await res.json();
+                    setProcessingState(false);
+
+                    if (!data.success) {
+                        showError(data.message || "Live search failed");
+                        return;
+                    }
+                    renderV2Results(data);
                 } else {
-                    // No recent match — clear everything, show the recent-feed notice.
-                    resetFeedStates();
-                    resultsSection.classList.add("show");
-                    resultsMeta.textContent = `Drishti searched the last ${duration}s of the live camera buffer.`;
-                    resultsList.innerHTML = `
-                        <div class="empty-results">
-                            <strong>No Reliable Match Found in Recent Live Feed</strong><br>
-                            ${r.message || `Nothing matched in the last ${duration}s.`}
-                        </div>`;
-                    setOperatorIdle("Live search complete. No recent match.");
+                    // Photo-only search on live buffer
+                    const fd = new FormData();
+                    fd.append("file", selectedFile);
+                    fd.append("camera_id", liveCameraId);
+                    fd.append("duration_seconds", String(duration));
+                    const res = await fetch(`${BACKEND_URL}/api/search/live-buffer`, { method: "POST", body: fd });
+                    const data = await res.json();
+                    setProcessingState(false);
+
+                    const r = data.results || {};
+                    if (r.decision === "match_found" && (r.matches || []).length) {
+                        resetFeedStates();
+                        applyMatches(r.matches);
+                        renderResultsList(r.matches);
+                        const best = r.matches[0];
+                        resultsMeta.textContent =
+                            `Match Found in Recent Live Feed · Age: ${best.age_seconds ?? "?"}s ago · ` +
+                            `Search Window: last ${duration}s`;
+                        setOperatorSuccess(`Live match: ${matchStrengthLabel(best.decision)} ` +
+                            `(similarity ${Number(best.best_similarity ?? 0).toFixed(2)}, ${best.age_seconds}s ago).`);
+                    } else {
+                        resetFeedStates();
+                        resultsSection.classList.add("show");
+                        resultsMeta.textContent = `Drishti searched the last ${duration}s of the live camera buffer.`;
+                        resultsList.innerHTML = `
+                            <div class="empty-results">
+                                <strong>No Reliable Match Found in Recent Live Feed</strong><br>
+                                ${r.message || `Nothing matched in the last ${duration}s.`}
+                            </div>`;
+                        setOperatorIdle("Live search complete. No recent match.");
+                    }
                 }
             } catch (error) {
                 setProcessingState(false);
@@ -1504,6 +1734,91 @@
             });
         }
 
+        function formatHms(seconds) {
+            if (seconds === null || seconds === undefined || Number.isNaN(Number(seconds))) {
+                return "";
+            }
+            const total = Math.max(0, Math.floor(Number(seconds)));
+            const h = String(Math.floor(total / 3600)).padStart(2, "0");
+            const m = String(Math.floor((total % 3600) / 60)).padStart(2, "0");
+            const s = String(total % 60).padStart(2, "0");
+            return `${h}:${m}:${s}`;
+        }
+
+        function renderWhyChips(sighting) {
+            const hits = (sighting.appearance && sighting.appearance.attribute_hits) || [];
+            const face = sighting.face;
+            const chips = [];
+            if (face && face.decision) chips.push(`face:${matchStrengthLabel(face.decision).toLowerCase()}`);
+            hits.forEach((hit) => chips.push(hit));
+            if (!chips.length && sighting.evidence) chips.push(sighting.evidence);
+            return chips.map((chip) => `<span class="file-meta">${chip}</span>`).join("");
+        }
+
+        function renderV2Results(data) {
+            const verified = data.verified || [];
+            const leads = data.leads || [];
+            const all = verified.concat(leads);
+
+            resetFeedStates();
+            applyMatches(all.map((item) => ({
+                camera: item.camera_id,
+                decision: item.face ? item.face.decision : "lead"
+            })));
+
+            resultsSection.classList.add("show");
+            resultsMeta.textContent = `${data.message || "Search complete."} ${data.timings ? `Search ${data.timings.search_ms} ms.` : ""}`.trim();
+
+            if (!all.length) {
+                resultsList.innerHTML = `
+                    <div class="empty-results">
+                        <strong>No Reliable Match Found</strong><br>
+                        ${data.message || "No verified match or appearance lead crossed the threshold."}
+                    </div>`;
+                setOperatorIdle("Search complete. No reliable match.");
+                return;
+            }
+
+            const renderCard = (item, kind) => {
+                const title = kind === "verified" ? "Verified" : "Lead (unverified)";
+                const image = item.best_frame || item.best_crop;
+                const timeText = item.t_start_hms || formatHms(item.t_start);
+                const score = item.appearance && item.appearance.z !== undefined
+                    ? `<div class="result-row"><span>Appearance z</span><span>${Number(item.appearance.z).toFixed(2)}</span></div>`
+                    : "";
+                const face = item.face && item.face.best_similarity !== undefined
+                    ? `<div class="result-row"><span>Face similarity</span><span>${Number(item.face.best_similarity).toFixed(2)}</span></div>`
+                    : "";
+
+                return `
+                    <article class="result-card${kind === "verified" ? " high-confidence" : ""}">
+                        <div class="result-accent"></div>
+                        ${image ? `<img src="${image}" class="result-image" alt="${title} crop" onerror="this.style.opacity='0.35'">` : ""}
+                        <div class="result-title">${title}: ${item.camera_name || item.camera_id || "Unknown Camera"}</div>
+                        <div class="result-data">
+                            <div class="result-row"><span>Evidence</span><span>${item.evidence || (kind === "verified" ? "face" : "appearance")}</span></div>
+                            ${face}
+                            ${score}
+                            ${timeText ? `<div class="result-row"><span>Time</span><span>${timeText}</span></div>` : ""}
+                            ${item.location ? `<div class="result-row"><span>Location</span><span>${item.location}</span></div>` : ""}
+                            ${item.clip_url ? `<div class="result-row"><span>Clip</span><span><a href="${item.clip_url}" target="_blank" rel="noopener" style="color:var(--cream)">Open</a></span></div>` : ""}
+                            <div class="result-row"><span>Why</span><span>${renderWhyChips(item)}</span></div>
+                        </div>
+                    </article>`;
+            };
+
+            resultsList.innerHTML = [
+                ...verified.map((item) => renderCard(item, "verified")),
+                ...leads.map((item) => renderCard(item, "lead"))
+            ].join("");
+
+            if (data.last_seen) {
+                setOperatorSuccess(`Last seen at ${data.last_seen.location || data.last_seen.camera_name || data.last_seen.camera_id}.`);
+            } else {
+                setOperatorSuccess(data.message || "Search complete.");
+            }
+        }
+
         function renderResultsList(matches) {
             if (!matches.length) {
                 resultsSection.classList.add("show");
@@ -1563,6 +1878,7 @@
                 previewImage.src = e.target.result;
                 previewSection.classList.add("show");
                 uploadDefault.classList.add("hidden");
+                if (removePhotoBtn) removePhotoBtn.style.display = "flex";
                 fileName.textContent = file.name;
                 fileSize.textContent = `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
             };
@@ -1570,9 +1886,27 @@
             setOperatorIdle("Idle. Target loaded and ready.");
         }
 
+        function clearPhoto() {
+            selectedFile = null;
+            photoInput.value = "";
+            previewImage.src = "";
+            previewSection.classList.remove("show");
+            uploadDefault.classList.remove("hidden");
+            if (removePhotoBtn) removePhotoBtn.style.display = "none";
+            fileName.textContent = "No file selected";
+            fileSize.textContent = "";
+            if (descriptionInput.value.trim()) {
+                setOperatorIdle("Idle. Ready for description search.");
+            } else {
+                setOperatorIdle("Idle. Waiting for image upload or description.");
+            }
+        }
+
         async function startSearch() {
-            if (!selectedFile) {
-                setStatus("Please select a photo first.", "error");
+            const description = descriptionInput.value.trim();
+
+            if (!selectedFile && !description) {
+                setStatus("Please select a photo or enter a description.", "error");
                 return;
             }
 
@@ -1588,13 +1922,15 @@
                 findButton.textContent = "Searching...";
 
                 const formData = new FormData();
-                formData.append("file", selectedFile);
+                if (selectedFile) formData.append("photo", selectedFile);
+                if (description) formData.append("description", description);
 
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 600000);
 
                 try {
-                    const response = await fetch(`${BACKEND_URL}/api/search`, {
+                    const endpoint = "/api/v2/search";
+                    const response = await fetch(`${BACKEND_URL}${endpoint}`, {
                         method: "POST",
                         body: formData,
                         signal: controller.signal
@@ -1617,18 +1953,13 @@
                         return;
                     }
 
-                    if (data.results) {
-                        setProcessingState(false);
-                        displayResults(data.results);
-                    } else {
-                        showError("No results returned from search");
-                        setProcessingState(false);
-                    }
+                    setProcessingState(false);
+                    renderV2Results(data);
 
                 } catch (error) {
                     clearTimeout(timeoutId);
                     if (error.name === "AbortError") {
-                        showError("Search timed out. Videos may be too large or system is busy.");
+                        showError("Search timed out. System may be busy.");
                     } else {
                         showError("Error: " + error.message);
                     }
@@ -1647,7 +1978,136 @@
         function matchStrengthLabel(decision) {
             if (decision === "strong_match") return "Strong";
             if (decision === "possible_match") return "Possible";
+            if (decision === "lead") return "Lead";
             return "Match";
+        }
+
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let isRecordingAudio = false;
+
+        function setupSpeechInput() {
+            micButton.disabled = false;
+            micButton.title = "Click to speak";
+
+            micButton.addEventListener("click", async () => {
+                if (isRecordingAudio) {
+                    stopVoiceRecording();
+                    return;
+                }
+                await startVoiceRecording();
+            });
+        }
+
+        async function startVoiceRecording() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    audioChunks = [];
+                    const mimeType = ["audio/webm", "audio/mp4", "audio/ogg", ""].find(
+                        (t) => !t || (window.MediaRecorder && MediaRecorder.isTypeSupported(t))
+                    );
+                    mediaRecorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+                    mediaRecorder.ondataavailable = (event) => {
+                        if (event.data && event.data.size > 0) audioChunks.push(event.data);
+                    };
+                    mediaRecorder.onstop = async () => {
+                        stream.getTracks().forEach((track) => track.stop());
+                        const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType || "audio/webm" });
+                        await submitVoiceAudio(blob);
+                    };
+                    mediaRecorder.start();
+                    isRecordingAudio = true;
+                    micButton.classList.add("listening");
+                    micButton.title = "Listening... Click to finish";
+                    setStatus("Listening... Speak description, then click mic again.", "");
+                    return;
+                } catch (err) {
+                    console.warn("getUserMedia failed or denied:", err);
+                }
+            }
+
+            startSpeechRecognitionFallback();
+        }
+
+        function stopVoiceRecording() {
+            if (mediaRecorder && mediaRecorder.state !== "inactive") {
+                mediaRecorder.stop();
+            }
+            if (speechRecognition) {
+                try { speechRecognition.stop(); } catch (_) {}
+            }
+            isRecordingAudio = false;
+            micButton.classList.remove("listening");
+            micButton.title = "Click to speak";
+        }
+
+        function startSpeechRecognitionFallback() {
+            const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!Recognition) {
+                setStatus("Microphone permission or speech recognition unavailable in this browser.", "error");
+                return;
+            }
+            speechRecognition = new Recognition();
+            speechRecognition.lang = "en-IN";
+            speechRecognition.interimResults = true;
+            speechRecognition.continuous = false;
+            speechRecognition.onstart = () => {
+                isRecordingAudio = true;
+                micButton.classList.add("listening");
+                setStatus("Listening...", "");
+            };
+            speechRecognition.onresult = (event) => {
+                let transcript = "";
+                for (let i = event.resultIndex; i < event.results.length; i += 1) {
+                    transcript += event.results[i][0].transcript;
+                }
+                descriptionInput.value = transcript.trim();
+            };
+            speechRecognition.onerror = (event) => {
+                isRecordingAudio = false;
+                micButton.classList.remove("listening");
+                setStatus(`Voice input failed: ${event.error}`, "error");
+            };
+            speechRecognition.onend = () => {
+                isRecordingAudio = false;
+                micButton.classList.remove("listening");
+                if (descriptionInput.value.trim()) {
+                    setStatus("Description captured. Ready to search.", "success");
+                }
+            };
+            try {
+                speechRecognition.start();
+            } catch (err) {
+                isRecordingAudio = false;
+                micButton.classList.remove("listening");
+                setStatus(`Could not start speech recognition: ${err.message}`, "error");
+            }
+        }
+
+        async function submitVoiceAudio(blob) {
+            setStatus("Transcribing audio...", "");
+            try {
+                const formData = new FormData();
+                const ext = blob.type.includes("mp4") ? "mp4" : "webm";
+                formData.append("audio", blob, `voice.${ext}`);
+                formData.append("lang", "auto");
+
+                const response = await fetch(`${BACKEND_URL}/api/v2/intake/transcribe`, {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await response.json();
+                if (data.success) {
+                    const text = data.description_en || data.transcript || "";
+                    descriptionInput.value = text;
+                    setStatus(`Voice captured (${data.engine}): "${text}"`, "success");
+                } else {
+                    setStatus(data.message || "Transcription failed.", "error");
+                }
+            } catch (error) {
+                setStatus(`Transcription error: ${error.message}`, "error");
+            }
         }
 
         function showNoReliableMatch(results) {
@@ -1699,7 +2159,69 @@
             setOperatorIdle("Idle. Waiting for retry.");
         }
 
-        uploadArea.addEventListener("click", () => photoInput.click());
+        uploadArea.addEventListener("click", (e) => {
+            if (e.target.closest("#removePhotoBtn")) return;
+            photoInput.click();
+        });
+
+        if (removePhotoBtn) {
+            removePhotoBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                clearPhoto();
+            });
+        }
+
+        async function triggerReindex() {
+            if (reindexButton) reindexButton.disabled = true;
+            if (healthLine) healthLine.textContent = "Reindexing...";
+            try {
+                const resp = await fetch(`${BACKEND_URL}/api/v2/index/rebuild`, { method: "POST" });
+                const data = await resp.json();
+                if (data.success) {
+                    if (healthLine) healthLine.textContent = "Reindexing...";
+                    pollIndexStatus();
+                } else {
+                    if (healthLine) healthLine.textContent = data.message || "Reindex failed";
+                    if (reindexButton) reindexButton.disabled = false;
+                }
+            } catch (err) {
+                if (healthLine) healthLine.textContent = "Reindex error";
+                if (reindexButton) reindexButton.disabled = false;
+            }
+        }
+
+        async function pollIndexStatus() {
+            try {
+                const resp = await fetch(`${BACKEND_URL}/api/v2/index/status`);
+                const data = await resp.json();
+                if (data.success) {
+                    if (data.status === "indexing") {
+                        if (healthLine) healthLine.textContent = `Indexing (${data.completed_cameras || 0}/${data.total_cameras || 0})...`;
+                        setTimeout(pollIndexStatus, 1500);
+                        return;
+                    }
+                    if (healthLine) healthLine.textContent = "Index up to date";
+                    if (reindexButton) reindexButton.disabled = false;
+                    return;
+                }
+            } catch (_) {}
+            if (reindexButton) reindexButton.disabled = false;
+        }
+
+        async function checkSystemHealth() {
+            try {
+                const resp = await fetch(`${BACKEND_URL}/api/v2/health`);
+                const data = await resp.json();
+                if (data.success && healthLine) {
+                    healthLine.textContent = "System ready";
+                }
+            } catch (_) {}
+        }
+
+        if (reindexButton) {
+            reindexButton.addEventListener("click", triggerReindex);
+        }
 
         uploadArea.addEventListener("dragover", (e) => {
             e.preventDefault();
@@ -1746,6 +2268,7 @@
 
         connectCctvForm.addEventListener("submit", handleConnectCctvSubmit);
         findButton.addEventListener("click", startSearch);
+        setupSpeechInput();
 
         // Live-camera controls — created hidden, revealed once a phone connects.
         // Duration selector (which recent window to search).
@@ -1788,6 +2311,7 @@
             initializeCCTVPreview();
             clearResultsSection();
             setOperatorIdle("");
+            checkSystemHealth();
         });
     </script>
 </body>

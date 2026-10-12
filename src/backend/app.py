@@ -439,6 +439,15 @@ async def save_cctv_config(cameras: Dict[str, Any]):
 # STATIC FILES
 # ============================================================================
 
+# v2 (M1, task A2): register every /api/v2 router BEFORE the static mount.
+# Anything included after app.mount("/") is unreachable (docs/TRD.md §2 quirk 1).
+try:
+    from src.backend.v2 import register_v2
+    register_v2(app)
+    logger.info("v2 routes registered")
+except Exception as e:
+    logger.warning(f"Could not register v2 routes: {e}", exc_info=True)
+
 # Mount frontend static files
 try:
     app.mount("/", StaticFiles(directory="Frontend", html=True), name="frontend")
