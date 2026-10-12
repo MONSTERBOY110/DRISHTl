@@ -1,4 +1,4 @@
-# AGENTS.md — rules for coding agents on Drishti
+# AGENTS.md: rules for coding agents on Drishti
 
 Applies to any coding agent working in this repo. `CLAUDE.md` imports this file.
 

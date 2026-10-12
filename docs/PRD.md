@@ -1,4 +1,4 @@
-# Drishti — Product Requirements Document (PRD)
+# Drishti: Product Requirements Document (PRD)
 
 > Technical detail lives in [`TRD.md`](TRD.md). Current status and known issues live in the [`README`](../README.md#status).
 
@@ -19,7 +19,7 @@ Two things make this slow:
 | **Parent / reporter** | Describe the person by voice in Bangla, Hindi or English; no app install |
 
 ## 3. Starting point: v0.5
-Photo → face search across recorded clips (InsightFace, open-set "No Reliable Match"), per-camera result cards, and a phone/IP live-camera module. It's slow (~1–2 min per search on CPU) and blind when the face isn't visible.
+Photo → face search across recorded clips (InsightFace, open-set "No Reliable Match"), per-camera result cards, and a phone/IP live-camera module. It's slow (~1-2 min per search on CPU) and blind when the face isn't visible.
 
 ## 4. What v2 adds
 

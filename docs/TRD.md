@@ -1,4 +1,4 @@
-# Drishti — Technical Requirements Document (TRD)
+# Drishti: Technical Requirements Document (TRD)
 
 > Section 6 (API contract) is the agreement between backend and frontend. If you change it, update this file and `Frontend/v2/mock/*.json` in the same commit.
 > Read with: [`PRD.md`](PRD.md) (what and why), the [`README`](../README.md#status) (current status, known issues), [`../AGENTS.md`](../AGENTS.md) (rules for agents).
@@ -25,7 +25,7 @@
 | `src/backend/vision/matcher.py` | `normalize`, `cosine`, `decide_track_match(similarities) -> {decision: strong_match / possible_match / no_reliable_match, ...}` |
 | `src/backend/vision/config.py` | All face thresholds (`MATCH_THRESHOLD` 0.55, `POSSIBLE_MATCH_THRESHOLD` 0.45, `MIN_MATCH_FRAMES` 2, …), env-overridable with the `DRISHTI_` prefix. **Reuse these; don't fork them.** |
 | `src/backend/vision/tracker.py` | IoU face tracker (per video) |
-| `src/backend/vision/pipeline.py` | `search(target_path, videos, search_id)`. **Re-decodes every video on every search**, which takes ~1–2 min on CPU. v2 replaces this with index-once. |
+| `src/backend/vision/pipeline.py` | `search(target_path, videos, search_id)`. **Re-decodes every video on every search**, which takes ~1-2 min on CPU. v2 replaces this with index-once. |
 | `src/backend/camera/*`, `routes_camera.py` | Phone/IP live camera: `POST /api/camera/connect`, MJPEG `/api/camera/stream/{id}`, status/list/disconnect. The worker indexes faces at 1 FPS into a 30 s `RollingBuffer`. `POST /api/search/live-buffer` searches it. |
 | `Frontend/index.html` | Single page with inline CSS and JS: CCTV grid, photo upload, per-camera result cards, "Connect CCTV" modal |
 
@@ -65,7 +65,7 @@
    Frontend/v2/index.html  control room               Frontend/v2/volunteer.html  phone
 ```
 
-**Core idea:** decode video **once** at index time and store one record per *person track*, holding face embeddings (if a face was ever visible), an appearance embedding, and clothing colours. A search is then just numpy dot products over a few thousand vectors: **< 1 s instead of 1–2 min**. Because appearance is indexed, a person whose **face is never visible** can still be found from a text description.
+**Core idea:** decode video **once** at index time and store one record per *person track*, holding face embeddings (if a face was ever visible), an appearance embedding, and clothing colours. A search is then just numpy dot products over a few thousand vectors: **< 1 s instead of 1-2 min**. Because appearance is indexed, a person whose **face is never visible** can still be found from a text description.
 
 ---
 
@@ -161,7 +161,7 @@ Files: `data/v2/crops/`, `data/v2/frames/`, `data/v2/cases/`. All of `data/v2/` 
 
 ---
 
-## 6. API contract (`/api/v2`) — frontend codes against this; mocks live in `Frontend/v2/mock/`
+## 6. API contract (`/api/v2`): the frontend codes against this; mocks live in `Frontend/v2/mock/`
 
 All responses carry `"success": true|false`. Errors: HTTP 4xx/5xx with `{"success": false, "message": "..."}`. Times: `t_*` = seconds from clip start; `wall_time` = ISO-8601 string or `null`.
 
@@ -339,7 +339,7 @@ Secrets go in `.env` only (git-ignored). Never commit keys.
 ## 10. Performance budgets (to be measured, not assumed; record numbers in the README / `docs/CALIBRATION.md`)
 | Metric | Target |
 |---|---|
-| Search latency after indexing (≤ 5k tracks) | < 1 s (v0.5: ~60–120 s CPU per search) |
+| Search latency after indexing (≤ 5k tracks) | < 1 s (v0.5: ~60-120 s CPU per search) |
 | Index throughput on the reference GPU (RTX 3050) | ≥ real-time for 720p at FRAME_SKIP 3 |
 | Live alert latency (person appears → phone shows alert) | < 5 s |
 | False "verified" on distractors in test footage | 0 |
